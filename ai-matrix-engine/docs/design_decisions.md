@@ -125,8 +125,124 @@ AI Matrix Engine
 
 Each module is verified independently before integration into the next level. This incremental approach reduces debugging complexity, promotes modularity, and mirrors professional hardware development practices.
 
+
+---
+
+## Decision 7: Why choose an Output-Stationary dataflow?
+
+**Question**
+
+Which systolic array dataflow should be adopted for the AI Matrix Engine?
+
+**Answer**
+
+The AI Matrix Engine adopts an **Output-Stationary (OS)** dataflow, where each Processing Element (PE) retains and updates its partial sum locally until the final output value is computed.
+
+In this architecture:
+
+- Input activations propagate horizontally across the systolic array.
+- Weights propagate vertically through the array.
+- Partial sums remain stationary within each PE and are accumulated locally.
+
+This approach minimizes the movement of partial sums, simplifies accumulator management, and naturally maps the MAC operation into each Processing Element.
+
+---
+
+### Alternatives Considered
+
+#### Weight-Stationary (WS)
+
+In a Weight-Stationary architecture, weights remain fixed inside each Processing Element while activations stream through the array.
+
+**Advantages**
+
+- Reduces repeated weight accesses.
+- Excellent for inference accelerators with static weights.
+- Widely adopted in commercial AI accelerators.
+
+**Disadvantages**
+
+- Requires more sophisticated scheduling.
+- More complex control logic for loading and reusing weights.
+- Less intuitive for an educational hardware library.
+
+---
+
+#### Input-Stationary (IS)
+
+In an Input-Stationary architecture, input activations remain local while weights and partial sums move through the array.
+
+**Advantages**
+
+- Efficient for specific convolution workloads.
+- Reduces activation movement.
+
+**Disadvantages**
+
+- Increased movement of partial sums.
+- More complicated interconnect design.
+- Less suitable for the initial implementation.
+
+---
+
+### Why Output-Stationary?
+
+The Output-Stationary approach was selected because it provides the best balance between simplicity, modularity, and scalability for the first version of the AI Matrix Engine.
+
+The architecture offers several benefits:
+
+- Simple Processing Element design.
+- Local accumulation within each PE.
+- Reduced partial-sum communication.
+- Straightforward RTL implementation.
+- Easier functional verification.
+- Clean mapping to FPGA and ASIC design flows.
+- Excellent educational value while remaining representative of practical AI accelerator architectures.
+
+---
+
+### Data Movement
+
+```
+      Matrix A
+        →
+PE ──► PE ──► PE ──► PE
+
+↓      ↓      ↓      ↓
+
+PE ──► PE ──► PE ──► PE
+
+↓      ↓      ↓      ↓
+
+PE ──► PE ──► PE ──► PE
+
+↓      ↓      ↓      ↓
+
+PE ──► PE ──► PE ──► PE
+
+Weights move downward.
+Activations move horizontally.
+Partial sums remain inside each PE.
+```
+
+---
+
+### Implications
+
+Choosing an Output-Stationary architecture influences the design of every subsequent module in the AI Matrix Engine.
+
+Specifically:
+
+- The Processing Element (PE) will contain the accumulator register.
+- The MAC unit remains purely combinational.
+- Each PE forwards activation and weight data to neighboring PEs every clock cycle.
+- Accumulated outputs are written only after all required multiply-accumulate operations have completed.
+
+This modular organization simplifies verification and supports incremental scaling from a single PE to larger systolic arrays.
+
 ---
 
 **Status:** Accepted
 
-**Last Updated:** July 2026
+**Version:** AI Matrix Engine v1.0
+
