@@ -8,7 +8,7 @@ This repository aims to provide modular hardware building blocks for modern AI s
 
 ## Current Development
 
-- 🚧 Matrix Engine
+- ✅ Matrix Engine
 - 🚧 ReLU Accelerator
 - 🚧 Softmax Accelerator
 - 🚧 LayerNorm Accelerator
@@ -28,9 +28,9 @@ This repository aims to provide modular hardware building blocks for modern AI s
 ## Repository Roadmap
 
 ### AI Compute
-- Matrix Multiplication Engine
-- MAC Array
-- Systolic Array
+- ✅ Matrix Multiplication Engine
+- ✅MAC Array
+- ✅Systolic Array
 
 ### Transformer
 - Softmax
