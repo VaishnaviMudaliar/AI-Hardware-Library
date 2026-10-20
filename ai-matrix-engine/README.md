@@ -39,13 +39,13 @@ The accelerator is fully verified with self-checking testbenches and backpressur
 
 Activation Stream (A)            Weight Stream (B)
 [M * IN_WIDTH] flat bus        [N * IN_WIDTH] flat bus
-│                                │
-▼                                ▼
+          │                                │
+          ▼                                ▼
 ┌─────────────────────────────────────────────────────────┐
 │         AXI4-Stream Wrapper Interface (Handshakes)      │
 └───────────────────────────┬─────────────────────────────┘
-│ (mac_enable, clr_acc)
-▼
+                            │ (mac_enable, clr_acc)
+                            ▼
 ┌─────────────────────────────────────────────────────────┐
 │            Systolic Matrix Multiplier Array             │
 │                                                         │
@@ -58,15 +58,15 @@ Activation Stream (A)            Weight Stream (B)
 │   │ PE [M-1,0]   │ ──── Row M-1 ──> │ PE [M-1,N-1] │    │
 │   └──────┬───────┘                  └──────┬───────┘    │
 └──────────┼─────────────────────────────────┼────────────┘
-│ [32-bit INT32 Acc]              │ [32-bit INT32 Acc]
-▼                                 ▼
+           │ [32-bit INT32 Acc]              │ [32-bit INT32 Acc]
+           ▼                                 ▼
 ┌─────────────────────────────────────────────────────────┐
 │     Post-Processor Array (Arithmetic Shift + Clamp)     │
 └───────────────────────────┬─────────────────────────────┘
-│
-▼
-Master Stream (C)
-[M * N * OUT_WIDTH] flat bus
+                            │
+                            ▼
+                      Master Stream (C)
+                [M * N * OUT_WIDTH] flat bus
 
 ```
 
